@@ -1,47 +1,47 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Dice from "./components/Dice.vue";
+import RollButton from "./components/RollButton.vue";
+import { ref, computed } from 'vue';
+
+let dicesHistory = ref([]);
+
+const recentDices = computed(() => {
+  return dicesHistory.value.slice(0, 5);
+});
+
+function addDiceRoll() {
+  const newRoll = [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1, true];
+  dicesHistory.value.unshift(newRoll);
+  if (dicesHistory.value.length > 5) {
+    dicesHistory.value.pop()
+  }
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <h1>Dé virtuel</h1>
+  <div class="container">
+    <div v-for="(hist, index) in recentDices" :key="index" class="histLine">
+      <Dice :num="hist[0]" v-bind:isLatest="index === 0"/>
+      <Dice :num="hist[1]" v-bind:isLatest="index === 0"/>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </div>
+  <RollButton @click="addDiceRoll" id="roller" />
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+#roller {
+  position: sticky;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -100%);
+
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.histLine {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 15px 0;
 }
 </style>
