@@ -28,6 +28,7 @@ function deleteHistory() {
   <h1>Dé virtuel</h1>
   <div class="container">
     <div v-for="(hist, index) in recentDices" :key="index" class="histLine">
+      <p>{{hist[0][1]}}</p>
       <Dice :num="hist[0][0]" v-bind:isLatest="index === 0"/>
       <Dice :num="hist[1][0]" v-bind:isLatest="index === 0"/>
     </div>
